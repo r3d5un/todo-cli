@@ -96,3 +96,36 @@ func (l *List) String() string {
 	}
 	return formatted
 }
+
+func (l *List) List(incomplete bool, verbose bool) {
+	formatted := ""
+
+	for k, t := range *l {
+		if incomplete {
+			if t.Done {
+				continue
+			}
+		}
+		prefix := " "
+		if t.Done {
+			prefix = "X "
+		}
+		if verbose {
+			switch t.Done {
+			case true:
+				formatted += fmt.Sprintf(
+					"%s%d: %s - created %v - completed %v\n",
+					prefix, k+1, t.Task, t.CreatedAt.Format("2020-01-01 23:59"), t.CompletedAt.Format("2020-01-01 23:59"),
+				)
+			default:
+				formatted += fmt.Sprintf(
+					"%s%d: %s - created %v\n",
+					prefix, k+1, t.Task, t.CreatedAt.Format("2020-01-01 23:59"),
+				)
+			}
+		} else {
+			formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+		}
+	}
+	fmt.Printf(formatted)
+}

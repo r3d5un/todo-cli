@@ -24,6 +24,8 @@ func main() {
 	list := flag.Bool("list", false, "List all tasks")
 	complete := flag.Int("complete", 0, "Item to be completed")
 	del := flag.Int("del", 0, "Delete an item by ID")
+	verbose := flag.Bool("verbose", false, "Combined with -list to include timestamps")
+	incomplete := flag.Bool("incomplete", false, "Only show incomplete tasks")
 
 	flag.Parse()
 
@@ -40,7 +42,7 @@ func main() {
 
 	switch {
 	case *list:
-		fmt.Print(l)
+		l.List(*incomplete, *verbose)
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
